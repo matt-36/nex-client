@@ -2,6 +2,7 @@ extern crate winapi;
 use std::thread;
 
 use nex::Nex;
+use types::game_data;
 use winapi::shared::minwindef::*;
 use winapi::ctypes::*;
 use winapi::um::consoleapi;
@@ -12,9 +13,10 @@ mod types;
 mod nex;
 
 use data::signatures;
-use types::controller::Controller;
+use types::controller;
 
-const NEX: Nex = Nex::new();
+const NEX: Nex = Nex::new(); // needs fixed
+const GAME_DATA: game_data::GameData = game_data::GameData::new(); // needs fixed
 
 pub fn keyboard_listener() -> u32 {
     println!("Keyboard listener started");
@@ -26,7 +28,7 @@ pub fn keyboard_listener() -> u32 {
         println!("Failed to locate keymap.");
         panic!("Keymap not found");
     }
-    let mouse_controller: Controller = g_data.getController();
+    let mouse_controller: &controller::Controller = GAME_DATA.get_controller();
 
 
     0
