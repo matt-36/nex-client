@@ -6,13 +6,12 @@ use winapi::shared::ntdef::LPCSTR;
 use winapi::um::psapi::{GetModuleInformation, MODULEINFO};
 use winapi::um::libloaderapi::GetModuleHandleA;
 use winapi::{um::processthreadsapi::GetCurrentProcess, shared::minwindef::HMODULE};
-use winapi::shared::minwindef::{BYTE, PBYTE, LPVOID, DWORD};
+use winapi::shared::minwindef::{BYTE, PBYTE, LPVOID, DWORD, HINSTANCE};
 
 
 
 pub fn get_byte(pattern: &str) -> u8 {
     (
-        (
             if (
                 (
                     pattern.chars().nth(0).unwrap() as u8 & (!0x20)
@@ -65,7 +64,6 @@ pub fn get_byte(pattern: &str) -> u8 {
             } 
             
         )
-    )
 }
 
 pub fn find_signature(szModule: &str, szSignature: &str) -> u32 {
@@ -81,7 +79,6 @@ pub fn find_signature(szModule: &str, szSignature: &str) -> u32 {
             GetModuleInformation(GetCurrentProcess(), range_start as HMODULE, mi_mod_info, size_of::<HMODULE>() as u32)
         };
     }
-    
     let range_end = range_start + unsafe { (*mi_mod_info).SizeOfImage };
 
     let mut pat_byte = get_byte(pattern);
@@ -126,3 +123,8 @@ pub fn find_signature(szModule: &str, szSignature: &str) -> u32 {
 
     return 0;
 }
+
+
+// fn get_address(offset: u64) -> u64 {
+
+// }

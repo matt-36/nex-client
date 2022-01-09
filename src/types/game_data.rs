@@ -25,7 +25,7 @@ pub struct GameData {
 }
 
 impl GameData {
-    pub fn new() -> Self {
+    pub const fn new() -> Self {
         Self {
             client_instance: None,
             local_player: None,
@@ -44,8 +44,14 @@ impl GameData {
         }
     }
 
-    pub fn can_use_move_keys(&self) {
-
+    pub fn can_use_move_keys(&self) -> bool {
+        // let mc = self.client_instance.minecraft_game;
+        // if mc.is_none() {
+        //     false
+        // } else {
+        //     mc.can_use_keybinds()
+        // }
+        true
     }
 
     pub fn is_key_down(&self, key: i8) {
@@ -104,7 +110,10 @@ impl GameData {
         return self.game_mode.as_ref().unwrap()
     }
 
-    pub fn get_controller(&self) -> &controller::Controller {
-        return self.controller.as_ref().unwrap()
+    pub fn get_controller(&self) -> Option<&controller::Controller> {
+        if !self.controller.is_none() {
+            return self.controller.as_ref()
+        }
+        return None
     }
 }
