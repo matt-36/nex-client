@@ -1,15 +1,19 @@
 
 
-use std::{ffi::c_void, ptr::null};
+use std::{ffi::{c_void, CString}, ptr::null};
 
-use super::*;
+use winapi::um::{libloaderapi::GetModuleHandleA, winnt::LPCSTR};
+
+use crate::utils;
+
+use super::{client_instance::ClientInstance, player::Player, controller::Controller, game_mode::GameMode, entity::Entity};
 
 pub struct GameData {
-    client_instance: Option<client_instance::ClientInstance>,
-    player: Option<player::Player>,
-    game_mode: Option<game_mode::GameMode>,
-    controller: Option<controller::Controller>,
-    raknet_instance: Option<raknet_instance::RaknetInstance>,
+    client_instance: Option<ClientInstance>,
+    player: Option<Player>,
+    game_mode: Option<GameMode>,
+    controller: Option<Controller>,
+    // raknet_instance: Option<RaknetInstance>,
 
     h_dll_instance: i8,
 
@@ -31,7 +35,7 @@ impl GameData {
             player: None,
             game_mode: None,
             controller: None,
-            raknet_instance: None,
+            // raknet_instance: None,
             h_dll_instance: 0,
             chest_list: Vec::new(),
             fov: 0.0,
@@ -82,7 +86,7 @@ impl GameData {
 
     }
 
-    pub fn entity_list_tick(&mut self, entities: Vec<entity::Entity>) {
+    pub fn entity_list_tick(&mut self, entities: Vec<Entity>) {
 
     }
 
@@ -94,7 +98,7 @@ impl GameData {
         return self.h_dll_instance
     }
 
-    pub fn get_local_player(&self) -> Option<&player::Player> {
+    pub fn get_local_player(&self) -> Option<&Player> {
         if !self.player.is_none() {
             return self.player.as_ref()
         } else {
@@ -106,20 +110,31 @@ impl GameData {
         return self.player.is_none()
     }
 
-    pub fn get_game_mode(&self) -> &game_mode::GameMode {
+    pub fn get_game_mode(&self) -> &GameMode {
         return self.game_mode.as_ref().unwrap()
     }
 
-    pub fn get_controller(&self) -> Option<&controller::Controller> {
+    pub fn get_controller(&self) -> Option<&Controller> {
         if !self.controller.is_none() {
             return self.controller.as_ref()
         }
         return None
     }
-    pub fn get_player(&self) -> Option<&player::Player> {
+    pub fn get_player(&self) -> Option<&Player> {
         if !self.player.is_none() {
             return self.player.as_ref()
         }
         return None
+    }
+    pub fn get_client_instance(&self) -> *const ClientInstance {
+        let base;
+        unsafe {
+            base = GetModuleHandleA(CString::new("Minecraft.Windows.exe").unwrap().as_ptr() as LPCSTR) as u64;
+        }
+        println!("[DEBUG] Client instance: retrieved base");
+        let offsets = vec![0x0, 0x50, 0x0];
+        let client = utils::find_multi_level_pointer((base + 0x04223B60).try_into().unwrap(), offsets) as *const ClientInstance;
+        println!("[DEBUG] Client instance: found client instance");
+        client
     }
 }

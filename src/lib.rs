@@ -58,7 +58,7 @@ pub fn start() {
 
     let mut mod_manager = ModuleHandler::new();
     println!("{:?}", NEX.is_running);
-    mod_manager.modules[0].on_enable();
+    mod_manager.modules[1].on_enable();
     while NEX.is_running {
         // println!("performing main loop");
         thread::sleep(time::Duration::from_millis(5));

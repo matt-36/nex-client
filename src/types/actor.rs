@@ -3,10 +3,12 @@
 
 // }
 
-pub trait Actor {
-    // fn on_ground(&self) -> bool {
-    //     return (*self + 0x1D8) as bool
-    // }
+pub trait Actor { 
+    fn on_ground(&self) -> *mut bool {
+        let addr = (self as *const Self as *const u64 as usize) + 0x1D8; // TODO: Breaks here, need to figure out safe way to cast self as a usize
+        println!("[DEBUG] Found onground addr: {:?}", addr);
+        addr as *mut bool
+    }
     // fn getBodyRot(&self) -> Vec2<f32>;
     // fn getAABB(&self) -> AABB<f32>;
     // fn isRidingMob(&self, actor: &dyn Actor) -> bool;

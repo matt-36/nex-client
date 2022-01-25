@@ -10,3 +10,7 @@ impl Player {
     
 }
 
+impl Actor for Player {
+    
+}
+

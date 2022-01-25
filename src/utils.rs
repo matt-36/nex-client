@@ -125,6 +125,14 @@ pub fn find_signature(szModule: &str, szSignature: &str) -> u32 {
 }
 
 
-// fn get_address(offset: u64) -> u64 {
-
-// }
+pub fn find_multi_level_pointer(base: usize, offsets: Vec<usize>) -> usize {
+    let mut addr = base;
+    for i in 0..offsets.len() {
+        let r_addr = addr as *mut usize;
+        if r_addr == null_mut() {
+            return addr
+        }
+        addr = addr + offsets[i]
+    }
+    return addr
+}

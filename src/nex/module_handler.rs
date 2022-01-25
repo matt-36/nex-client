@@ -1,8 +1,14 @@
+use crate::nex::modules::air_speed::AirSpeed;
+
 use super::modules::*;
 
 pub trait Module {
-    fn on_enable(&mut self);
-    fn on_tick(&mut self);
+    fn on_enable(&mut self) {
+        
+    }
+    fn on_tick(&mut self) {
+        
+    }
 }
 
 pub struct ModuleHandler {
@@ -14,9 +20,11 @@ impl ModuleHandler {
         let modlist: Vec<Box<dyn Module>> = vec![
             // Air jump
             Box::new(air_jump::AirJump::new()),
+            Box::new(AirSpeed::new())
             //
         ];
         println!("Created module manager");
+        
         // Construct modulehandler
         Self {
             modules: modlist
