@@ -38,7 +38,7 @@ impl Module for AirJump {
             let base: u64 = GetModuleHandleA(CString::new("Minecraft.Windows.exe").unwrap().as_ptr() as LPCSTR) as u64;
             println!("Found base: {:X}", &base);
             // self.jump_addr = base + offset; // TODO: Doesnt give me the correct address... unless its the ptr addr but idk how to use that yet
-            self.jump_addr = 0x2450D1ADA28;
+            self.jump_addr = 0x228A3B9AA28;
             println!("Found jump address: {:X}", self.jump_addr);
             if memoryapi::VirtualProtect(
                 self.jump_addr as LPVOID,
@@ -53,13 +53,13 @@ impl Module for AirJump {
     }
     fn on_tick(&mut self) {
         // self.jump_addr = 16777237;
-        let buf: *const c_void = 167772473 as *const c_void;
-        let bytes_written: *mut usize = null_mut();
+        // let buf: *const c_void = 167772473 as *const c_void;
+        // let bytes_written: *mut usize = null_mut();
         // let tmp_addr: *mut c_void = self.jump_addr as *mut c_void;
+        let x: *mut i32;
         unsafe {
-            if memoryapi::WriteProcessMemory(GetCurrentProcess(), self.jump_addr as LPVOID, buf, size_of::<i32>(), bytes_written) == 0 {
-                println!("Failed to write memory: {}", errhandlingapi::GetLastError()) // TODO: This throws error code 998 | 0x3E6
-            }
+            x = self.jump_addr as *mut i32;
+            *x = 167772473;
         }
     }
 }

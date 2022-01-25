@@ -6,7 +6,7 @@ use super::*;
 
 pub struct GameData {
     client_instance: Option<client_instance::ClientInstance>,
-    local_player: Option<local_player::LocalPlayer>,
+    player: Option<player::Player>,
     game_mode: Option<game_mode::GameMode>,
     controller: Option<controller::Controller>,
     raknet_instance: Option<raknet_instance::RaknetInstance>,
@@ -28,7 +28,7 @@ impl GameData {
     pub const fn new() -> Self {
         Self {
             client_instance: None,
-            local_player: None,
+            player: None,
             game_mode: None,
             controller: None,
             raknet_instance: None,
@@ -94,16 +94,16 @@ impl GameData {
         return self.h_dll_instance
     }
 
-    pub fn get_local_player(&self) -> Option<&local_player::LocalPlayer> {
-        if !self.local_player.is_none() {
-            return self.local_player.as_ref()
+    pub fn get_local_player(&self) -> Option<&player::Player> {
+        if !self.player.is_none() {
+            return self.player.as_ref()
         } else {
             return None
         }
     }
 
     pub fn in_game(&self) -> bool {
-        return self.local_player.is_none()
+        return self.player.is_none()
     }
 
     pub fn get_game_mode(&self) -> &game_mode::GameMode {
@@ -113,6 +113,12 @@ impl GameData {
     pub fn get_controller(&self) -> Option<&controller::Controller> {
         if !self.controller.is_none() {
             return self.controller.as_ref()
+        }
+        return None
+    }
+    pub fn get_player(&self) -> Option<&player::Player> {
+        if !self.player.is_none() {
+            return self.player.as_ref()
         }
         return None
     }
