@@ -1,4 +1,4 @@
-# rime-client
+# nex-client
 Minecraft bedrock combat client
 
 unfinished project
